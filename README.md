@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+#Tinder for movies
+
+Demo: https://wojciechszutryk.github.io/TinderForMovies/
+
+This is a recrutation task application.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
