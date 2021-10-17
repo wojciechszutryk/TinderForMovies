@@ -2,8 +2,9 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import reducer from './reducer'
 import { devToolsEnhancer } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
+import {initialState as initialStateFromReducer} from './reducer'
 
-function configureStore(initialState = {finishedIndexes: []}) {
+function configureStore(initialState = initialStateFromReducer ) {
     const store = createStore(
         reducer,
         initialState,
