@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Card, Container, Typography } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import React, { useCallback, useMemo } from 'react'
 import './App.css'
@@ -14,7 +14,7 @@ import {
 import { useAppDispatch } from './hooks/useAppDispach'
 import { useAppSelector } from './hooks/useAppSelector'
 
-export const useStyles = makeStyles(() =>
+const useStyles = makeStyles(() =>
     createStyles({
         container: {
             display: 'flex',
@@ -24,11 +24,21 @@ export const useStyles = makeStyles(() =>
             overflow: 'hidden',
             paddingTop: 20,
         },
+        messageCard: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '70vh',
+        },
+        header: {
+            textAlign: 'center',
+        },
     })
 )
 
 function App() {
     const dispatch = useAppDispatch()
+    const classes = useStyles()
     const finishedIndexes = useAppSelector((state) => state.finishedIndexes)
     const activeIndex = useAppSelector((state) => state.activeIndex)
     const { isLoading, error, data } = useQuery(
@@ -72,8 +82,8 @@ function App() {
         return <Box>An error has occurred: + {(error as Error).message}</Box>
 
     return (
-        <Container maxWidth="sm">
-            <Typography variant="h2" color="text.primary">
+        <Container maxWidth="xs">
+            <Typography variant="h2" className={classes.header} gutterBottom>
                 Tinder for movies
             </Typography>
             {activeIndex ? (
@@ -89,9 +99,11 @@ function App() {
                 </Box>
             ) : (
                 <Box>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary">
-                        No more recommendations available
-                    </Typography>
+                    <Card className={classes.messageCard}>
+                        <Typography>
+                            Sorry, no more recommendations available
+                        </Typography>
+                    </Card>
                 </Box>
             )}
         </Container>

@@ -6,8 +6,9 @@ import {
     CardContent,
     Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { useMutation } from 'react-query'
+import { useStyles } from './styles'
 import { acceptRecommendation, rejectRecommendation } from '../../data/fetch'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown'
@@ -29,41 +30,63 @@ const MovieCard = ({
     rating,
     finishRecommendation,
 }: Props) => {
+    const [visible, setVisible] = useState('visible')
+    const classes = useStyles()
     const acceptRecommendationMutation = useMutation(acceptRecommendation)
     const rejectRecommendationMutation = useMutation(rejectRecommendation)
 
     function handleAcceptRecommendation() {
-        finishRecommendation()
-        acceptRecommendationMutation.mutate(id)
+        setVisible('fadeOutLeft')
+        setTimeout(() => {
+            setVisible('visible')
+            finishRecommendation()
+            acceptRecommendationMutation.mutate(id)
+        }, 600)
     }
 
     function handleRejectRecommendation() {
-        finishRecommendation()
-        rejectRecommendationMutation.mutate(id)
+        setVisible('fadeOutRight')
+        setTimeout(() => {
+            setVisible('visible')
+            finishRecommendation()
+            rejectRecommendationMutation.mutate(id)
+        }, 600)
     }
 
+    const className = useMemo(() => {
+        if (visible === 'visible') return classes.visible
+        else if (visible === 'fadeOutLeft') return classes.fadeOutLeft
+        else if (visible === 'fadeOutRight') return classes.fadeOutRight
+    }, [visible])
+
     return (
-        <Card>
+        <Card className={className}>
             <CardContent>
                 <Typography
-                    sx={{ fontSize: 14 }}
-                    color="text.secondary"
                     gutterBottom
+                    className={classes.title}
+                    variant="body1"
                 >
                     {title}
                 </Typography>
                 <Box>
-                    <img src={imageURL} alt="movie" />
+                    <img src={imageURL} className={classes.image} alt="movie" />
                 </Box>
-                <Typography variant="body2">{summary}</Typography>
-                <Typography variant="body2">{rating}</Typography>
+                <Typography variant="body2" gutterBottom>
+                    <span className={classes.spanElement}>Summary: </span>
+                    {summary}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                    <span className={classes.spanElement}>Rating: </span>
+                    {rating}
+                </Typography>
             </CardContent>
-            <CardActions>
+            <CardActions className={classes.actions}>
                 <Button size="small" onClick={handleAcceptRecommendation}>
-                    <ThumbUpIcon />
+                    <ThumbUpIcon className={classes.thumbUpIcon} />
                 </Button>
                 <Button size="small" onClick={handleRejectRecommendation}>
-                    <ThumbDownIcon />
+                    <ThumbDownIcon className={classes.thumbDownIcon} />
                 </Button>
             </CardActions>
         </Card>
